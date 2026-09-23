@@ -2,7 +2,6 @@
 import calendar
 import random
 from datetime import date
-from datetime import date
 
 # Task types + planned minutes from the sample task table in the problem statement
 TASK_TYPES = [
@@ -50,8 +49,8 @@ def get_latest_telemetry():
     return {
         "type": "telemetry",
         "timestamp": "2026-09-23T09:14:02",
-        "machine_id": "CAT-320-01",
-        "machine_model": "CAT 320",
+        "machine_id": "CAT-EXC-01",
+        "machine_model": "CAT 320 Excavator",
         "operator_id": "OP-017",
         "machine_state": "digging",
         "engine_on": True,
@@ -97,19 +96,19 @@ def get_alerts():
         {"type": "alert", "alert_id": "A-0001", "timestamp": f"{today}T09:02:10",
          "category": "seatbelt", "severity": "warning",
          "message": "Seatbelt not fastened while machine is moving.",
-         "speak": False, "machine_id": "CAT-320-01", "active": False},
+         "speak": False, "machine_id": "CAT-EXC-01", "active": False},
         {"type": "alert", "alert_id": "A-0002", "timestamp": f"{today}T09:15:40",
          "category": "proximity", "severity": "critical",
          "message": "Person in danger zone behind the machine.",
-         "speak": True, "machine_id": "CAT-320-01", "active": False},
+         "speak": True, "machine_id": "CAT-EXC-01", "active": False},
         {"type": "alert", "alert_id": "A-0003", "timestamp": f"{today}T10:30:05",
          "category": "idling", "severity": "info",
          "message": "Engine idling for 12 minutes. Consider switching off.",
-         "speak": False, "machine_id": "CAT-320-01", "active": False},
+         "speak": False, "machine_id": "CAT-EXC-01", "active": False},
         {"type": "alert", "alert_id": "A-0004", "timestamp": f"{today}T11:45:00",
          "category": "weather", "severity": "warning",
          "message": "Rain: ground may be soft. Reduce speed near edges.",
-         "speak": False, "machine_id": "CAT-320-01", "active": True},
+         "speak": False, "machine_id": "CAT-EXC-01", "active": True},
     ]
 
 
