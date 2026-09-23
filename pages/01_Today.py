@@ -2,8 +2,7 @@ import calendar
 from datetime import date
 
 import streamlit as st
-from data.dummy import (get_today_tasks, get_month_tasks, get_latest_telemetry,
-                        get_operator, get_weather, get_safety_status)
+from data.dummy import (get_today_tasks, get_month_tasks, get_latest_telemetry,get_operator, get_weather, get_safety_status,DATA_SOURCE)
 
 # ---------------- Current machine ----------------
 tel = get_latest_telemetry()
@@ -16,7 +15,8 @@ machine_bar = (
     '<div class="machine-bar">'
     '<div>'
     f'<div class="m-name">🚜 {tel["machine_model"]} · {tel["machine_id"]}</div>'
-    f'<div class="m-sub">Operator: {op["name"]}</div>'
+    f'<div class="m-sub">Operator: {op["name"]} · '
+    f'<span class="src {DATA_SOURCE["telemetry"]}">{DATA_SOURCE["telemetry"].upper()}</span></div>'
     '</div>'
     '<div class="m-right">'
     f'<div class="m-engine {engine_class}">● {engine_text}</div>'

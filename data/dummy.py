@@ -1,7 +1,29 @@
-# ALL fake data lives here. Later, swap these for calls to the FastAPI backend.
+# Data layer for the app.
+# Every function tries the FastAPI backend first. If the backend is down,
+# it falls back to the dummy data below, so the app never shows an error.
 import calendar
 import random
 from datetime import date
+
+import requests
+
+API_URL = "http://127.0.0.1:8000"
+
+# Where the latest data came from: "live" (backend) or "demo" (dummy data)
+DATA_SOURCE = {"telemetry": "demo", "alerts": "demo"}
+
+
+def _from_backend(path, name, fallback):
+    """Try the backend. If it's down or errors, use the dummy data instead."""
+    try:
+        r = requests.get(f"{API_URL}{path}", timeout=1)
+        r.raise_for_status()
+        DATA_SOURCE[name] = "live"
+        return r.json()
+    except Exception:
+        DATA_SOURCE[name] = "demo"
+        return fallback()
+
 
 # Task types + planned minutes from the sample task table in the problem statement
 TASK_TYPES = [
@@ -12,6 +34,8 @@ TASK_TYPES = [
     ("Demolition", 90),
 ]
 
+
+# ======================= Tasks (dummy for now) =======================
 
 def get_today_tasks():
     return [
@@ -44,7 +68,13 @@ def get_month_tasks(year, month):
     return schedule
 
 
+# ======================= Telemetry (LIVE from backend) =======================
+
 def get_latest_telemetry():
+    return _from_backend("/telemetry/latest", "telemetry", _dummy_telemetry)
+
+
+def _dummy_telemetry():
     # Exact shape of the agreed telemetry contract
     return {
         "type": "telemetry",
@@ -59,10 +89,13 @@ def get_latest_telemetry():
         "operator_seated": True,
         "hydraulic_load_pct": 35,
         "fuel_level_pct": 72.4,
+        "operating_hours": 3.27,
         "gps": {"lat": 12.97, "lon": 79.13},
         "proximity": {"object": "person", "distance_m": 14.0, "direction": "rear"},
     }
 
+
+# ======================= Operator, weather, safety (dummy for now) =======================
 
 def get_operator():
     return {"operator_id": "OP-017", "name": "Ravi", "operating_minutes": 196}
@@ -89,7 +122,19 @@ def get_safety_status():
     order = ["safe", "warning", "critical"]
     return max(get_safety_statuses().values(), key=order.index)
 
+
+# ======================= Alerts (LIVE from backend) =======================
+
 def get_alerts():
+    return _from_backend("/alerts", "alerts", _dummy_alerts)
+
+
+def get_active_alerts():
+    return _from_backend("/alerts?active=true", "alerts",
+                         lambda: [a for a in _dummy_alerts() if a["active"]])
+
+
+def _dummy_alerts():
     """Today's alerts, in the agreed alert format (oldest first)."""
     today = date.today().isoformat()
     return [
@@ -110,8 +155,3 @@ def get_alerts():
          "message": "Rain: ground may be soft. Reduce speed near edges.",
          "speak": False, "machine_id": "CAT-EXC-01", "active": True},
     ]
-
-
-def get_active_alerts():
-    """Alerts that are still happening right now."""
-    return [a for a in get_alerts() if a["active"]]

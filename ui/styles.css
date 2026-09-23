@@ -253,6 +253,10 @@ div[role="dialog"] {
 .incident .i-status.active   { background: #FDECEA; color: #C5221F; }
 .incident .i-status.resolved { background: #E6F4EA; color: #1E8E3E; }
 
+.src { font-weight: 700; font-size: 0.75rem; }
+.src.live { color: #34C759; }
+.src.demo { color: #FFCD11; }
+
 /* ---------- On a real phone: no frame, full screen ---------- */
 /* Keep this at the END so it overrides the laptop rules above */
 @media (max-width: 500px) {
