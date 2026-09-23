@@ -25,6 +25,25 @@ nav = st.navigation([today, safety, training, ask, incidents, shift, simulator],
 # ---------------- Alerts (shown on every page) ----------------
 active = get_active_alerts()
 
+# ---------------- Auto-refresh ----------------
+# Remember which alerts were active when this screen was drawn.
+st.session_state.shown_alert_ids = sorted(a["alert_id"] for a in active)
+st.session_state.setdefault("ticks", 0)
+
+
+@st.fragment(run_every=2)
+def watch_for_changes():
+    """Every 2 s, check the backend. Redraw the whole screen only if something changed."""
+    st.session_state.ticks += 1
+    now_ids = sorted(a["alert_id"] for a in get_active_alerts())
+    alerts_changed = now_ids != st.session_state.shown_alert_ids
+    telemetry_due = st.session_state.ticks % 5 == 0      # every 10 s
+    if alerts_changed or telemetry_due:
+        st.rerun()
+
+
+watch_for_changes()
+
 # Critical pop-up
 if "acknowledged" not in st.session_state:
     st.session_state.acknowledged = {}      # {alert_id: time acknowledged}

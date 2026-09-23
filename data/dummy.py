@@ -105,22 +105,34 @@ def get_weather():
     return {"condition": "Rain", "temp_c": 27}
 
 
+# Which Safety card each alert category belongs to
+CARD_FOR_CATEGORY = {
+    "seatbelt": "seatbelt",
+    "proximity": "proximity",
+    "idling": "idle",
+    "weather": "weather",
+    "overwork": "overwork",
+}
+LEVEL = {"info": "safe", "warning": "warning", "critical": "critical"}
+ORDER = ["safe", "warning", "critical"]
+
+
 def get_safety_statuses():
-    # One status per safety check: "safe" | "warning" | "critical"
-    # Person A's rules engine decides these later.
-    return {
-        "seatbelt": "safe",
-        "proximity": "safe",
-        "idle": "safe",
-        "weather": "warning",
-        "overwork": "safe",
-    }
+    """Each Safety card's status = the worst ACTIVE alert in its category."""
+    statuses = {card: "safe" for card in CARD_FOR_CATEGORY.values()}
+    for a in get_active_alerts():
+        card = CARD_FOR_CATEGORY.get(a["category"])
+        if card:
+            level = LEVEL[a["severity"]]
+            if ORDER.index(level) > ORDER.index(statuses[card]):
+                statuses[card] = level
+    return statuses
 
 
 def get_safety_status():
-    """Overall status = the worst of the individual checks."""
-    order = ["safe", "warning", "critical"]
-    return max(get_safety_statuses().values(), key=order.index)
+    """Overall status = the worst of all active alerts (including ones without a card)."""
+    levels = ["safe"] + [LEVEL[a["severity"]] for a in get_active_alerts()]
+    return max(levels, key=ORDER.index)
 
 
 # ======================= Alerts (LIVE from backend) =======================
