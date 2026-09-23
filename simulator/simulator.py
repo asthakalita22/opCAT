@@ -95,7 +95,7 @@ def _tick_autonomous_values():
     else:
         state["speed_kmh"] = 0.0
         state["hydraulic_load_pct"] = 0.0
-        state[machine_state"] = "idle"
+        state["machine_state"] = "idle"
 
 
 def build_telemetry():
