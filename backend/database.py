@@ -21,7 +21,8 @@ def init_db():
     c.execute("""CREATE TABLE IF NOT EXISTS alerts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         alert_id TEXT, machine_id TEXT, operator_id TEXT,
-        type TEXT, severity TEXT, message TEXT, timestamp TEXT
+        category TEXT, severity TEXT, message TEXT, speak INTEGER,
+        timestamp TEXT, active INTEGER
     )""")
     c.execute("""CREATE TABLE IF NOT EXISTS incidents (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,3 +50,50 @@ def insert_telemetry(t):
     ))
     conn.commit()
     conn.close()
+
+
+def insert_alert(alert: dict):
+    """alert is one of backend.alerts' plain dicts (see _build_alert)."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("""INSERT INTO alerts (
+        alert_id, machine_id, operator_id, category, severity, message,
+        speak, timestamp, active
+    ) VALUES (?,?,?,?,?,?,?,?,?)""", (
+        alert["alert_id"], alert["machine_id"], alert["operator_id"],
+        alert["category"], alert["severity"], alert["message"],
+        int(alert["speak"]), alert["timestamp"], int(alert["active"]),
+    ))
+    conn.commit()
+    conn.close()
+
+
+def insert_incident(incident: dict):
+    """incident is one of backend.alerts' plain dicts (see _open_incident)."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("""INSERT INTO incidents (
+        incident_id, machine_id, operator_id, type, severity, description,
+        timestamp, resolved
+    ) VALUES (?,?,?,?,?,?,?,?)""", (
+        incident["incident_id"], incident["machine_id"], incident["operator_id"],
+        incident["type"], incident["severity"], incident["description"],
+        incident["timestamp"], int(incident["resolved"]),
+    ))
+    conn.commit()
+    conn.close()
+
+
+def get_incidents(machine_id: str | None = None) -> list[dict]:
+    """Full incident history, newest first. Used by pages/05_Incidents.py
+    and later by the Hour 9-11 training recommender."""
+    conn = get_conn()
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    if machine_id:
+        c.execute("SELECT * FROM incidents WHERE machine_id=? ORDER BY timestamp DESC", (machine_id,))
+    else:
+        c.execute("SELECT * FROM incidents ORDER BY timestamp DESC")
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return rows

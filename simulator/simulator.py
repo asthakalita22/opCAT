@@ -124,6 +124,9 @@ def build_telemetry():
             "object": "person",
             "distance_m": round(worker["distance_m"], 2),
             "direction": worker["direction"],
+            "relative_velocity_mps": round(worker["relative_velocity_mps"], 2),
+            "worker_x_m": round(worker["x"], 2),
+            "worker_y_m": round(worker["y"], 2),
         },
     }
 

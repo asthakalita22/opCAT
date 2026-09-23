@@ -10,6 +10,11 @@ class Proximity(BaseModel):
     object: str
     distance_m: float
     direction: str
+    # Hour 5-7 additions. Optional + default None so telemetry produced by
+    # the Hour 1-3 simulator (before this field existed) still validates.
+    relative_velocity_mps: Optional[float] = None
+    worker_x_m: Optional[float] = None
+    worker_y_m: Optional[float] = None
 
 class Telemetry(BaseModel):
     type: str = "telemetry"
