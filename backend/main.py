@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
-
+from datetime import date
 from backend.database import init_db, insert_telemetry
-from backend.schemas import Telemetry
+from backend.schemas import Alert, Telemetry
 
 app = FastAPI(title="CAT Smart Operator Assistant")
 
@@ -39,3 +39,24 @@ def get_latest_telemetry(machine_id: str | None = None):
     # (fine for a 1-machine hackathon demo)
     last_machine = list(latest_telemetry.keys())[-1]
     return latest_telemetry[last_machine]
+
+# ---------------- Alerts ----------------
+# In-memory list of alerts. The rules engine (rules.py) adds to this list.
+alerts: list[Alert] = []
+
+
+@app.get("/alerts")
+def get_alerts(active: bool | None = None):
+    """Today's alerts. /alerts?active=true returns only alerts still happening."""
+    today = date.today()
+    result = [a for a in alerts if a.timestamp.date() == today]
+    if active is not None:
+        result = [a for a in result if a.active == active]
+    return result
+
+
+@app.post("/alerts")
+def post_alert(a: Alert):
+    """Add an alert by hand. Useful for testing the frontend before the rules exist."""
+    alerts.append(a)
+    return {"status": "received", "alert_id": a.alert_id}
