@@ -39,6 +39,7 @@ state = {
     "hydraulic_load_pct": 20.0,
     "fuel_level_pct": 100.0,
     "operating_hours": 0.0,
+    "machine_state": "idle",
 }
 
 
@@ -61,6 +62,14 @@ def set_seated(seated: bool):
 def set_hydraulic_load(pct: float):
     state["hydraulic_load_pct"] = min(100.0, max(0.0, pct))
 
+VALID_STATES = ("idle", "traveling", "reversing", "swinging", "digging")
+
+
+def set_machine_state(machine_state: str):
+    """What the machine is doing right now. Drives the proximity zone shape."""
+    if machine_state not in VALID_STATES:
+        raise ValueError(f"machine_state must be one of {VALID_STATES}")
+    state["machine_state"] = machine_state
 
 def harsh_brake():
     """One-off event: sudden speed drop, used later for the harsh-braking rule."""
@@ -86,6 +95,7 @@ def _tick_autonomous_values():
     else:
         state["speed_kmh"] = 0.0
         state["hydraulic_load_pct"] = 0.0
+        state[machine_state"] = "idle"
 
 
 def build_telemetry():
@@ -97,7 +107,7 @@ def build_telemetry():
 
     return {
         "type": "telemetry",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now().astimezone().isoformat(),
         "machine_id": MACHINE_ID,
         "machine_model": MACHINE_MODEL,
         "operator_id": OPERATOR_ID,
@@ -108,6 +118,7 @@ def build_telemetry():
         "hydraulic_load_pct": round(state["hydraulic_load_pct"], 1),
         "fuel_level_pct": round(state["fuel_level_pct"], 2),
         "operating_hours": round(state["operating_hours"], 4),
+        "machine_state": state["machine_state"],
         "gps": {"lat": gps_lat, "lon": gps_lon},
         "proximity": {
             "object": "person",

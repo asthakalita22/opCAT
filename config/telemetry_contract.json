@@ -1,15 +1,17 @@
 {
   "type": "telemetry",
-  "timestamp": "...",
-  "machine_id": "...",
-  "machine_model": "...",
-  "operator_id": "...",
+  "timestamp": "2026-09-23T16:34:14+05:30",
+  "machine_id": "CAT-EXC-01",
+  "machine_model": "CAT 320 Excavator",
+  "operator_id": "OP-017",
+  "machine_state": "digging",
   "engine_on": true,
   "speed_kmh": 6.0,
   "seatbelt_fastened": false,
   "operator_seated": true,
   "hydraulic_load_pct": 35,
   "fuel_level_pct": 72.4,
+  "operating_hours": 3.27,
   "gps": { "lat": 12.97, "lon": 79.13 },
   "proximity": { "object": "person", "distance_m": 4.2, "direction": "rear" }
 }
