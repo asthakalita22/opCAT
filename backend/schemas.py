@@ -20,6 +20,8 @@ class Telemetry(BaseModel):
     engine_on: bool
     speed_kmh: float
     seatbelt_fastened: bool
+    operating_hours: float
+    machine_state: str = "idle"
     operator_seated: bool
     hydraulic_load_pct: float
     fuel_level_pct: float
