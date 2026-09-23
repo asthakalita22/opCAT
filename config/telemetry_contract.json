@@ -1,0 +1,15 @@
+{
+  "type": "telemetry",
+  "timestamp": "...",
+  "machine_id": "...",
+  "machine_model": "...",
+  "operator_id": "...",
+  "engine_on": true,
+  "speed_kmh": 6.0,
+  "seatbelt_fastened": false,
+  "operator_seated": true,
+  "hydraulic_load_pct": 35,
+  "fuel_level_pct": 72.4,
+  "gps": { "lat": 12.97, "lon": 79.13 },
+  "proximity": { "object": "person", "distance_m": 4.2, "direction": "rear" }
+}

@@ -1,0 +1,22 @@
+seatbelt:
+  warning_seconds: 3
+  critical_seconds: 10
+
+proximity:
+  yellow_radius_m: 10
+  red_radius_m: 5
+
+idle:
+  hydraulic_load_pct: 5
+  duration_minutes: 10
+
+unsafe:
+  site_speed_limit_kmh: 10
+  harsh_braking_delta_kmh: 5
+
+training:
+  alert_threshold: 3
+
+overwork:
+  standard_continuous_hours: 5
+  heat_continuous_hours: 3.5
