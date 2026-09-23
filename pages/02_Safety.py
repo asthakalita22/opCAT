@@ -1,12 +1,16 @@
 import streamlit as st
 from data.dummy import (get_latest_telemetry, get_operator, get_weather,
-                        get_safety_statuses, get_safety_status)
+                        get_safety_statuses, get_safety_status,
+                        get_alerts, get_active_alerts)
 
+# ---------- Load data ----------
 tel = get_latest_telemetry()
 op = get_operator()
 weather = get_weather()
 statuses = get_safety_statuses()
 overall = get_safety_status()
+alerts_today = get_alerts()
+active_alerts = get_active_alerts()
 
 LABEL = {"safe": "SAFE", "warning": "CAUTION", "critical": "CRITICAL"}
 ICON = {"safe": "🟢", "warning": "⚠️", "critical": "🔴"}
@@ -38,9 +42,18 @@ cards = [
     ("Operating hours", statuses["overwork"], hours_detail),
 ]
 
-# ---------- Page ----------
+# ---------- Alert counts ----------
+counts = {
+    "Active": len(active_alerts),
+    "Critical": sum(a["severity"] == "critical" for a in alerts_today),
+    "Warning": sum(a["severity"] == "warning" for a in alerts_today),
+    "Info": sum(a["severity"] == "info" for a in alerts_today),
+}
+
+# ================= Page =================
 st.subheader("Safety status")
 
+# Overall banner
 banner = (
     f'<div class="status-banner status-{overall}">'
     f'{ICON[overall]} {LABEL[overall]}'
@@ -48,6 +61,14 @@ banner = (
 )
 st.markdown(banner, unsafe_allow_html=True)
 
+# Alert counter
+counter = '<div class="counter-row">'
+for name, n in counts.items():
+    counter += f'<div class="counter {name.lower()}"><b>{n}</b><span>{name}</span></div>'
+counter += '</div>'
+st.markdown(counter, unsafe_allow_html=True)
+
+# Safety cards
 for title, status, detail in cards:
     card = (
         f'<div class="safety-card {status}">'
@@ -56,3 +77,5 @@ for title, status, detail in cards:
         '</div>'
     )
     st.markdown(card, unsafe_allow_html=True)
+
+st.page_link("pages/05_Incidents.py", label="View incident history", icon="📋")

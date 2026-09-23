@@ -102,8 +102,6 @@ with st.expander("📅 Month calendar"):
         )
 
 # ---------------- Small widgets ----------------
-tel = get_latest_telemetry()
-op = get_operator()
 weather = get_weather()
 status = get_safety_status()
 
