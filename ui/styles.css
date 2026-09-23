@@ -1,0 +1,152 @@
+/* =========================================================
+   CAT Operator Assistant: styles.css
+   ========================================================= */
+
+/* ---------- Hide Streamlit's own top bar (Deploy, menu) ---------- */
+[data-testid="stHeader"] { display: none; }
+
+/* ---------- Phone frame (laptop view) ---------- */
+[data-testid="stMain"] { background: #C9CED4; }
+
+.block-container {
+  max-width: 400px !important;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  margin: 24px auto;
+  padding: 1.5rem 1rem 6rem 1rem !important;
+  background: #E9ECEF;
+  border: 12px solid #15171A;
+  border-radius: 40px;
+}
+
+/* ---------- Bottom tab bar ---------- */
+.st-key-bottom_nav {
+  position: fixed;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 376px;
+  background: #FFFFFF;
+  border-radius: 0 0 28px 28px;
+  padding: 0.4rem 0.3rem 0.6rem;
+  z-index: 100;
+  box-shadow: 0 -1px 0 #D5D9DE;
+}
+.st-key-bottom_nav [data-testid="stHorizontalBlock"] {
+  flex-wrap: nowrap !important;
+  gap: 0 !important;
+}
+.st-key-bottom_nav [data-testid="stColumn"] {
+  min-width: 0 !important;
+  flex: 1 1 0 !important;
+}
+.st-key-bottom_nav a {
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.3rem 0 !important;
+  gap: 0 !important;
+}
+.st-key-bottom_nav a p { font-size: 0.72rem; }
+
+/* ---------- Big, glove-friendly buttons ---------- */
+.stButton button {
+  min-height: 56px;
+  border-radius: 10px;
+}
+.stButton button p {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+/* Main action button: black with yellow text (readable, CAT colours) */
+.stButton button[kind="primary"],
+[data-testid="stBaseButton-primary"] {
+  background: #15171A !important;
+  color: #FFCD11 !important;
+  border: none !important;
+}
+
+/* ---------- BIG widget: task card ---------- */
+.task-card {
+  background: #FFCD11;
+  color: #15171A;
+  border-radius: 14px;
+  padding: 1.1rem 1.2rem;
+  margin-bottom: 0.75rem;
+}
+.task-card .label { font-size: 0.9rem; }
+.task-card .name  { font-size: 2.4rem; font-weight: 700; line-height: 1.1; }
+.task-card .zone  { font-size: 1.05rem; margin-bottom: 0.8rem; }
+.task-card .times { display: flex; gap: 1.5rem; margin-bottom: 0.8rem; }
+.task-card .times span { display: block; font-size: 0.85rem; }
+.task-card .times b { font-size: 1.5rem; white-space: nowrap; }
+
+.progress-track {
+  height: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+}
+.progress-fill {
+  height: 10px;
+  background: #15171A;
+  border-radius: 5px;
+}
+
+/* ---------- SMALL widgets: 2-column grid ---------- */
+.tile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.tile {
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+}
+.tile span { color: #5B6168; font-size: 0.85rem; }
+.tile b    { display: block; font-size: 1.4rem; color: #15171A; }
+
+/* ---------- Month calendar ---------- */
+.st-key-calendar [data-testid="stHorizontalBlock"] {
+  flex-wrap: nowrap !important;
+  gap: 4px !important;
+}
+.st-key-calendar [data-testid="stColumn"] {
+  min-width: 0 !important;
+  flex: 1 1 0 !important;
+}
+.st-key-calendar .stButton button {
+  min-height: 38px;
+  padding: 0;
+  border-radius: 8px;
+}
+.st-key-calendar .stButton button p { font-size: 0.9rem; font-weight: 500; }
+.cal-head { text-align: center; font-size: 0.8rem; color: #5B6168; }
+
+/* ---------- Status colours for tiles ---------- */
+.tile.safe     { border-left: 6px solid #1E8E3E; }
+.tile.warning  { border-left: 6px solid #E37400; }
+.tile.critical { border-left: 6px solid #C5221F; }
+.tile.safe b     { color: #1E8E3E; }
+.tile.warning b  { color: #E37400; }
+.tile.critical b { color: #C5221F; }
+
+/* ---------- On a real phone: no frame, full screen ---------- */
+/* Keep this at the END so it overrides the laptop rules above */
+@media (max-width: 500px) {
+  [data-testid="stMain"] { background: #E9ECEF; }
+  .block-container {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    height: auto;
+    overflow-y: visible;
+    max-width: 100% !important;
+  }
+  .st-key-bottom_nav {
+    bottom: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+}
