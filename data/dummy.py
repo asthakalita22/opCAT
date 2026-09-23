@@ -2,6 +2,7 @@
 import calendar
 import random
 from datetime import date
+from datetime import date
 
 # Task types + planned minutes from the sample task table in the problem statement
 TASK_TYPES = [
@@ -52,6 +53,7 @@ def get_latest_telemetry():
         "machine_id": "CAT-320-01",
         "machine_model": "CAT 320",
         "operator_id": "OP-017",
+        "machine_state": "digging",
         "engine_on": True,
         "speed_kmh": 0.0,
         "seatbelt_fastened": True,
@@ -71,6 +73,46 @@ def get_weather():
     return {"condition": "Rain", "temp_c": 27}
 
 
+def get_safety_statuses():
+    # One status per safety check: "safe" | "warning" | "critical"
+    # Person A's rules engine decides these later.
+    return {
+        "seatbelt": "safe",
+        "proximity": "safe",
+        "idle": "safe",
+        "weather": "warning",
+        "overwork": "safe",
+    }
+
+
 def get_safety_status():
-    # "safe" | "warning" | "critical" (Person A's rules engine decides this later)
-    return "warning"
+    """Overall status = the worst of the individual checks."""
+    order = ["safe", "warning", "critical"]
+    return max(get_safety_statuses().values(), key=order.index)
+
+def get_alerts():
+    """Today's alerts, in the agreed alert format (oldest first)."""
+    today = date.today().isoformat()
+    return [
+        {"type": "alert", "alert_id": "A-0001", "timestamp": f"{today}T09:02:10",
+         "category": "seatbelt", "severity": "warning",
+         "message": "Seatbelt not fastened while machine is moving.",
+         "speak": False, "machine_id": "CAT-320-01", "active": False},
+        {"type": "alert", "alert_id": "A-0002", "timestamp": f"{today}T09:15:40",
+         "category": "proximity", "severity": "critical",
+         "message": "Person in danger zone behind the machine.",
+         "speak": True, "machine_id": "CAT-320-01", "active": False},
+        {"type": "alert", "alert_id": "A-0003", "timestamp": f"{today}T10:30:05",
+         "category": "idling", "severity": "info",
+         "message": "Engine idling for 12 minutes. Consider switching off.",
+         "speak": False, "machine_id": "CAT-320-01", "active": False},
+        {"type": "alert", "alert_id": "A-0004", "timestamp": f"{today}T11:45:00",
+         "category": "weather", "severity": "warning",
+         "message": "Rain: ground may be soft. Reduce speed near edges.",
+         "speak": False, "machine_id": "CAT-320-01", "active": True},
+    ]
+
+
+def get_active_alerts():
+    """Alerts that are still happening right now."""
+    return [a for a in get_alerts() if a["active"]]
