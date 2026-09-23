@@ -132,6 +132,56 @@
 .tile.warning b  { color: #E37400; }
 .tile.critical b { color: #C5221F; }
 
+/* ---------- Current machine bar ---------- */
+.machine-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #15171A;
+  color: #FFFFFF;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.75rem;
+}
+.machine-bar .m-name { font-weight: 600; font-size: 1rem; }
+.machine-bar .m-sub  { font-size: 0.85rem; color: #B8BEC6; }
+.machine-bar .m-right { text-align: right; }
+.machine-bar .m-engine { font-weight: 600; font-size: 0.9rem; }
+.machine-bar .m-engine.on  { color: #34C759; }
+.machine-bar .m-engine.off { color: #B8BEC6; }
+
+/* ---------- Safety page ---------- */
+.status-banner {
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.75rem;
+  color: #FFFFFF;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.status-safe     { background: #1E8E3E; }
+.status-warning  { background: #E37400; }
+.status-critical { background: #C5221F; }
+
+.safety-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5rem;
+  border-left: 8px solid #1E8E3E;
+}
+.safety-card.warning  { border-left-color: #E37400; }
+.safety-card.critical { border-left-color: #C5221F; }
+.safety-card .t { font-weight: 600; font-size: 1.1rem; }
+.safety-card .d { color: #5B6168; font-size: 0.95rem; }
+.safety-card .s { font-weight: 600; font-size: 0.95rem; }
+.safety-card .s.safe     { color: #1E8E3E; }
+.safety-card .s.warning  { color: #E37400; }
+.safety-card .s.critical { color: #C5221F; }
+
 /* ---------- On a real phone: no frame, full screen ---------- */
 /* Keep this at the END so it overrides the laptop rules above */
 @media (max-width: 500px) {

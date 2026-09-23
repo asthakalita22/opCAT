@@ -52,6 +52,7 @@ def get_latest_telemetry():
         "machine_id": "CAT-320-01",
         "machine_model": "CAT 320",
         "operator_id": "OP-017",
+        "machine_state": "digging",
         "engine_on": True,
         "speed_kmh": 0.0,
         "seatbelt_fastened": True,
@@ -71,6 +72,19 @@ def get_weather():
     return {"condition": "Rain", "temp_c": 27}
 
 
+def get_safety_statuses():
+    # One status per safety check: "safe" | "warning" | "critical"
+    # Person A's rules engine decides these later.
+    return {
+        "seatbelt": "safe",
+        "proximity": "safe",
+        "idle": "safe",
+        "weather": "warning",
+        "overwork": "safe",
+    }
+
+
 def get_safety_status():
-    # "safe" | "warning" | "critical" (Person A's rules engine decides this later)
-    return "warning"
+    """Overall status = the worst of the individual checks."""
+    order = ["safe", "warning", "critical"]
+    return max(get_safety_statuses().values(), key=order.index)

@@ -5,6 +5,27 @@ import streamlit as st
 from data.dummy import (get_today_tasks, get_month_tasks, get_latest_telemetry,
                         get_operator, get_weather, get_safety_status)
 
+# ---------------- Current machine ----------------
+tel = get_latest_telemetry()
+op = get_operator()
+
+engine_class = "on" if tel["engine_on"] else "off"
+engine_text = "Engine on" if tel["engine_on"] else "Engine off"
+
+machine_bar = (
+    '<div class="machine-bar">'
+    '<div>'
+    f'<div class="m-name">🚜 {tel["machine_model"]} · {tel["machine_id"]}</div>'
+    f'<div class="m-sub">Operator: {op["name"]}</div>'
+    '</div>'
+    '<div class="m-right">'
+    f'<div class="m-engine {engine_class}">● {engine_text}</div>'
+    f'<div class="m-sub">{tel["machine_state"].capitalize()}</div>'
+    '</div>'
+    '</div>'
+)
+st.markdown(machine_bar, unsafe_allow_html=True)
+
 # ---------------- Big task widget ----------------
 tasks = get_today_tasks()
 task = tasks[0]   # the next task
