@@ -29,13 +29,16 @@ class Telemetry(BaseModel):
     proximity: Optional[Proximity] = None
 
 class Alert(BaseModel):
+    type: str = "alert"
     alert_id: str
+    timestamp: datetime
+    category: str      # seatbelt | proximity | idling | unsafe_behavior | overwork | weather | sos
+    severity: str      # info | warning | critical
+    message: str
+    speak: bool = False
     machine_id: str
     operator_id: str
-    type: str          # e.g. "seatbelt", "proximity", "idling", "unsafe_behavior"
-    severity: str       # "warning" | "critical"
-    message: str
-    timestamp: datetime
+    active: bool = True
 
 class Incident(BaseModel):
     incident_id: str
